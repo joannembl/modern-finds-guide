@@ -15,24 +15,37 @@ const ModernFindsGuide = () => {
   }, [category]);
 
   // Get unique categories from products
-  const categories = ['🏠 Home Finds', '🐶 Pet Essentials', '☕ Kitchen & Coffee', '📱 Everyday Gadgets'];
+  const categories = ['Home Finds', 'Pet Essentials', 'Everyday Gadgets'];
   const allCategories = [...new Set(products.map(p => p.category))];
 
-  const filteredProducts = activeCategory === 'all' 
+  // Convert category name to URL-friendly slug
+  const categoryToSlug = (category) => {
+    return category.toLowerCase().replace(/\s+/g, '-');
+  };
+
+  // Convert URL slug back to category name
+  const slugToCategory = (slug) => {
+    if (!slug) return 'all';
+    return categories.find(cat => categoryToSlug(cat) === slug) || slug;
+  };
+
+  // Get actual category from URL param
+  const actualCategory = slugToCategory(category);
+
+  const filteredProducts = !category || actualCategory === 'all'
     ? products 
-    : products.filter(p => p.category === activeCategory);
+    : products.filter(p => p.category === actualCategory);
 
   const getCategoryDisplay = (category) => {
-    return category.split('-').map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
+    return category;
   };
 
   const handleCategoryClick = (cat) => {
     if (cat === 'all') {
       navigate('/');
     } else {
-      navigate(`/category/${cat}`);
+      const slug = categoryToSlug(cat);
+      navigate(`/category/${slug}`);
     }
   };
 
