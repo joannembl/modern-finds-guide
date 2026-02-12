@@ -185,7 +185,7 @@ const ModernFindsGuide = () => {
             letterSpacing: '0.05em',
             marginBottom: '8px'
           }}>
-            Thoughtfully Selected Favorites Just For You
+            Curated Amazon finds for modern living
           </p>
           <p style={{
             fontSize: '0.85rem',
