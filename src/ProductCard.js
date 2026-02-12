@@ -1,6 +1,18 @@
 import React from 'react';
 
 const ProductCard = ({ product, getCategoryDisplay }) => {
+  const handleShopClick = (e) => {
+    if (window.pintrk) {
+      window.pintrk('track', 'checkout', {
+        value: 1,
+        currency: 'USD',
+        line_items: [{
+          product_name: product.title,
+          product_category: product.category
+        }]
+      });
+    }
+  };
   return (
     <div className="col-12 col-md-6 col-lg-3">
       <div className="product-card">
@@ -26,7 +38,11 @@ const ProductCard = ({ product, getCategoryDisplay }) => {
           }}>
             {product.description}
           </p>
-          <a href={product.affiliateLink} className="shop-btn">
+          <a 
+            href={product.affiliateLink} 
+            className="shop-btn"
+            onClick={handleShopClick}
+          >
             Check Price on Amazon
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
