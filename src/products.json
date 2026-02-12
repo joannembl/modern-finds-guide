@@ -1,27 +1,27 @@
 [
   {
     "id": 1,
-    "title": "Apple AirPods 4 Wireless Earbuds",
-    "description": "AirPods 4 have been redesigned for exceptional all-day comfort and greater stability.",
-    "image": "https://m.media-amazon.com/images/I/51ppBwqC4xL._AC_SL1500_.jpg",
-    "affiliateLink": "https://amzn.to/4au7DYY",
-    "category": "📱 Everyday Gadgets"
+    "title": "Expandable Drawer Organizer for Kitchens",
+    "description": "Adjustable drawer organizer that instantly reduces clutter and keeps everyday items easy to find.",
+    "image": "https://m.media-amazon.com/images/I/81BP2xfGbqL._AC_SL1500_.jpg",
+    "affiliateLink": "https://amzn.to/4qzCXLP",
+    "category": "🏠 Home Finds"
   },
   {
     "id": 2,
-    "title": "Food Kitchen Scale",
-    "description": "This digital scale has endless uses for personal or commercial environments - great for homes, kitchens, offices, and more.",
-    "image": "https://m.media-amazon.com/images/I/91YrLTBnMcL._SL1500_.jpg",
-    "affiliateLink": "https://amzn.to/45ZjuwK",
+    "title": "Under-Sink Storage Organizer for Small Spaces",
+    "description": "Maximize hidden cabinet space with a tiered organizer designed to fit around pipes and awkward layouts.",
+    "image": "https://m.media-amazon.com/images/I/71hLPNG8cTL._AC_SL1500_.jpg",
+    "affiliateLink": "https://amzn.to/4qCQNNr",
     "category": "🏠 Home Finds"
   },
   {
     "id": 3,
-    "title": "Insulated Stainless Steel Water Bottle",
-    "description": "Keeps drinks cold for 24 hours. Leak-proof and the perfect size for your daily routine.",
-    "image": "https://m.media-amazon.com/images/I/618G9XTcv2L._AC_SL1080_.jpg",
-    "affiliateLink": "https://amzn.to/404TMTT",
-    "category": "📱 Everyday Gadgets"
+    "title": "Clear Fridge Organizer Bins for Easy Food Storage",
+    "description": "Transparent storage bins that keep your fridge clean, organized, and visually clutter-free.",
+    "image": "https://m.media-amazon.com/images/I/71BizguVWJL._SL1500_.jpg",
+    "affiliateLink": "https://amzn.to/4r9v5l7",
+    "category": "🏠 Home Finds"
   },
   {
     "id": 4,
@@ -33,10 +33,10 @@
   },
   {
     "id": 5,
-    "title": "Little Green Mini Portable Carpet and Upholstery Deep Cleaner",
-    "description": "This portable carpet and upholstery cleaner packs a powerful punch, easily tackling deep-down dirt, spills, and stains while being compact enough to store in any small space.",
-    "image": "https://m.media-amazon.com/images/I/71dRwF+K39L._AC_SL1500_.jpg",
-    "affiliateLink": "https://amzn.to/4rK6KCr",
+    "title": "Rotating Lazy Susan Organizer for Cabinets & Pantry",
+    "description": "A simple rotating organizer that makes everyday items easy to reach in kitchens, bathrooms, and pantries.",
+    "image": "https://m.media-amazon.com/images/I/71YA0Wc0HDL._AC_SL1500_.jpg",
+    "affiliateLink": "https://amzn.to/46ASqE5",
     "category": "🏠 Home Finds"
   }
 ]
