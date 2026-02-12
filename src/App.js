@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate, BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProductCard from './ProductCard';
 import productsData from './products.json';
 
 const ModernFindsGuide = () => {
-  const [activeCategory, setActiveCategory] = useState('all');
+  const { category } = useParams();
+  const navigate = useNavigate();
+  const activeCategory = category || 'all';
   const products = productsData;
+
+  // Scroll to top when category changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [category]);
 
   // Get unique categories from products
   const categories = ['🏠 Home Finds', '🐶 Pet Essentials', '☕ Kitchen & Coffee', '📱 Everyday Gadgets'];
@@ -18,6 +26,14 @@ const ModernFindsGuide = () => {
     return category.split('-').map(word => 
       word.charAt(0).toUpperCase() + word.slice(1)
     ).join(' ');
+  };
+
+  const handleCategoryClick = (cat) => {
+    if (cat === 'all') {
+      navigate('/');
+    } else {
+      navigate(`/category/${cat}`);
+    }
   };
 
   return (
@@ -84,11 +100,28 @@ const ModernFindsGuide = () => {
           box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
         }
         
+        /* Mobile: Remove hover effect, add tap effect */
+        @media (hover: none) and (pointer: coarse) {
+          .product-card:hover {
+            transform: none;
+          }
+          .product-card:active {
+            transform: scale(0.98);
+          }
+        }
+        
         .product-image {
           position: relative;
           height: 320px;
           overflow: hidden;
           background: #FFF8F0;
+        }
+        
+        /* Mobile: Adjust image height */
+        @media (max-width: 768px) {
+          .product-image {
+            height: 250px;
+          }
         }
         
         .product-image img {
@@ -100,6 +133,13 @@ const ModernFindsGuide = () => {
         
         .product-card:hover .product-image img {
           transform: scale(1.05);
+        }
+        
+        /* Mobile: Disable image zoom on hover */
+        @media (hover: none) and (pointer: coarse) {
+          .product-card:hover .product-image img {
+            transform: none;
+          }
         }
         
         .category-tag {
@@ -117,6 +157,16 @@ const ModernFindsGuide = () => {
           box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         
+        /* Mobile: Smaller tag */
+        @media (max-width: 768px) {
+          .category-tag {
+            font-size: 0.7rem;
+            padding: 4px 12px;
+            top: 12px;
+            right: 12px;
+          }
+        }
+        
         .shop-btn {
           display: inline-flex;
           align-items: center;
@@ -131,12 +181,32 @@ const ModernFindsGuide = () => {
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           letter-spacing: 0.02em;
           border: none;
+          width: 100%;
+          justify-content: center;
+        }
+        
+        /* Desktop: Back to inline width */
+        @media (min-width: 769px) {
+          .shop-btn {
+            width: auto;
+          }
         }
         
         .shop-btn:hover {
           background: #2C2C2C;
           transform: translateX(4px);
           color: white;
+        }
+        
+        /* Mobile: Tap effect instead of hover */
+        @media (hover: none) and (pointer: coarse) {
+          .shop-btn:hover {
+            transform: none;
+          }
+          .shop-btn:active {
+            background: #2C2C2C;
+            transform: scale(0.98);
+          }
         }
         
         .filter-btn {
@@ -152,6 +222,23 @@ const ModernFindsGuide = () => {
           letter-spacing: 0.03em;
           position: relative;
           overflow: hidden;
+          white-space: nowrap;
+        }
+        
+        /* Mobile: Smaller filter buttons */
+        @media (max-width: 768px) {
+          .filter-btn {
+            padding: 10px 20px;
+            font-size: 0.85rem;
+          }
+        }
+        
+        /* Mobile: Better touch targets */
+        @media (hover: none) and (pointer: coarse) {
+          .filter-btn {
+            min-height: 44px;
+            min-width: 44px;
+          }
         }
         
         .filter-btn:hover {
@@ -163,23 +250,64 @@ const ModernFindsGuide = () => {
           background: #8B9A7E;
           color: #FFFBF7;
         }
+        
+        /* Mobile: Tap effect */
+        @media (hover: none) and (pointer: coarse) {
+          .filter-btn:hover {
+            background: transparent;
+            color: #2C2C2C;
+          }
+          .filter-btn:active {
+            background: #8B9A7E;
+            color: #FFFBF7;
+            transform: scale(0.95);
+          }
+          .filter-btn.active:hover {
+            background: #8B9A7E;
+            color: #FFFBF7;
+          }
+        }
+        
+        /* Mobile: Improve text readability */
+        @media (max-width: 768px) {
+          body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+          }
+        }
+        
+        /* Mobile: Prevent horizontal scroll */
+        @media (max-width: 768px) {
+          html, body {
+            overflow-x: hidden;
+            width: 100%;
+          }
+        }
+        
+        /* Mobile: Better spacing */
+        @media (max-width: 768px) {
+          .container {
+            padding: 0 16px;
+          }
+        }
       `}</style>
 
       <div className="container py-5" style={{ position: 'relative', zIndex: 1, maxWidth: '1400px' }}>
         {/* Header */}
-        <header className="text-center mb-5">
+        <header className="text-center mb-5" style={{ padding: '0 8px' }}>
           <h1 style={{
             fontFamily: "'Playfair Display', serif",
-            fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+            fontSize: 'clamp(2rem, 8vw, 4rem)',
             fontWeight: 700,
             color: '#2C2C2C',
             marginBottom: '16px',
-            letterSpacing: '-0.02em'
+            letterSpacing: '-0.02em',
+            lineHeight: 1.1
           }}>
             Modern Finds Guide
           </h1>
           <p style={{
-            fontSize: 'clamp(1rem, 2vw, 1.25rem)',
+            fontSize: 'clamp(0.9rem, 3vw, 1.25rem)',
             color: '#8B9A7E',
             fontWeight: 300,
             letterSpacing: '0.05em',
@@ -188,7 +316,7 @@ const ModernFindsGuide = () => {
             Curated Amazon finds for modern living
           </p>
           <p style={{
-            fontSize: '0.85rem',
+            fontSize: 'clamp(0.75rem, 2vw, 0.85rem)',
             color: '#8B9A7E',
             opacity: 0.7
           }}>
@@ -200,7 +328,7 @@ const ModernFindsGuide = () => {
         <div className="d-flex justify-content-center flex-wrap gap-3 mb-5">
           <button 
             className={`filter-btn ${activeCategory === 'all' ? 'active' : ''}`}
-            onClick={() => setActiveCategory('all')}
+            onClick={() => handleCategoryClick('all')}
           >
             All
           </button>
@@ -208,7 +336,7 @@ const ModernFindsGuide = () => {
             <button 
               key={cat}
               className={`filter-btn ${activeCategory === cat ? 'active' : ''}`}
-              onClick={() => setActiveCategory(cat)}
+              onClick={() => handleCategoryClick(cat)}
             >
               {getCategoryDisplay(cat)}
             </button>
@@ -230,4 +358,16 @@ const ModernFindsGuide = () => {
   );
 };
 
-export default ModernFindsGuide;
+// Wrapper component with Router
+const App = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<ModernFindsGuide />} />
+        <Route path="/category/:category" element={<ModernFindsGuide />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+export default App;
