@@ -15,7 +15,7 @@ const ModernFindsGuide = () => {
   }, [category]);
 
   // Get unique categories from products
-  const categories = ['🏠 Home Finds', '🐶 Pet Essentials', '☕ Kitchen & Coffee', '📱 Everyday Gadgets'];
+  const categories = ['Home Finds', 'Pet Essentials', 'Kitchen & Coffee', 'Everyday Gadgets'];
   const allCategories = [...new Set(products.map(p => p.category))];
 
   const filteredProducts = activeCategory === 'all' 
