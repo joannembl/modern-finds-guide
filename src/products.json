@@ -5,7 +5,7 @@
     "description": "AirPods 4 have been redesigned for exceptional all-day comfort and greater stability.",
     "image": "https://m.media-amazon.com/images/I/51ppBwqC4xL._AC_SL1500_.jpg",
     "affiliateLink": "https://amzn.to/4au7DYY",
-    "category": "tech"
+    "category": "📱 Everyday Gadgets"
   },
   {
     "id": 2,
@@ -13,7 +13,7 @@
     "description": "This digital scale has endless uses for personal or commercial environments - great for homes, kitchens, offices, and more.",
     "image": "https://m.media-amazon.com/images/I/91YrLTBnMcL._SL1500_.jpg",
     "affiliateLink": "https://amzn.to/45ZjuwK",
-    "category": "home"
+    "category": "🏠 Home Finds"
   },
   {
     "id": 3,
@@ -21,7 +21,7 @@
     "description": "Keeps drinks cold for 24 hours. Leak-proof and the perfect size for your daily routine.",
     "image": "https://m.media-amazon.com/images/I/618G9XTcv2L._AC_SL1080_.jpg",
     "affiliateLink": "https://amzn.to/404TMTT",
-    "category": "everyday"
+    "category": "📱 Everyday Gadgets"
   },
   {
     "id": 4,
@@ -29,7 +29,7 @@
     "description": "Whichever way your day flows, the H2.0 FlowState tumbler keeps you refreshed with fewer refills.",
     "image": "https://m.media-amazon.com/images/I/51Uf3taYmjL._AC_SL1500_.jpg",
     "affiliateLink": "https://amzn.to/4c95SD1",
-    "category": "everyday"
+    "category": "📱 Everyday Gadgets"
   },
   {
     "id": 5,
@@ -37,6 +37,6 @@
     "description": "This portable carpet and upholstery cleaner packs a powerful punch, easily tackling deep-down dirt, spills, and stains while being compact enough to store in any small space.",
     "image": "https://m.media-amazon.com/images/I/71dRwF+K39L._AC_SL1500_.jpg",
     "affiliateLink": "https://amzn.to/4rK6KCr",
-    "category": "home"
+    "category": "🏠 Home Finds"
   }
 ]
