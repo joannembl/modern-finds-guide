@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "title": "Apple AirPods 4 Wireless Earbuds",
+    "description": "AirPods 4 have been redesigned for exceptional all-day comfort and greater stability.",
+    "image": "https://m.media-amazon.com/images/I/51ppBwqC4xL._AC_SL1500_.jpg",
+    "affiliateLink": "https://amzn.to/4au7DYY",
+    "category": "tech"
+  },
+  {
+    "id": 2,
+    "title": "Food Kitchen Scale",
+    "description": "This digital scale has endless uses for personal or commercial environments - great for homes, kitchens, offices, and more.",
+    "image": "https://m.media-amazon.com/images/I/91YrLTBnMcL._SL1500_.jpg",
+    "affiliateLink": "https://amzn.to/45ZjuwK",
+    "category": "home"
+  },
+  {
+    "id": 3,
+    "title": "Insulated Stainless Steel Water Bottle",
+    "description": "Keeps drinks cold for 24 hours. Leak-proof and the perfect size for your daily routine.",
+    "image": "https://m.media-amazon.com/images/I/618G9XTcv2L._AC_SL1080_.jpg",
+    "affiliateLink": "https://amzn.to/404TMTT",
+    "category": "everyday"
+  },
+  {
+    "id": 4,
+    "title": "STANLEY Quencher H2.0 Tumbler with Handle and Straw",
+    "description": "Whichever way your day flows, the H2.0 FlowState tumbler keeps you refreshed with fewer refills.",
+    "image": "https://m.media-amazon.com/images/I/51Uf3taYmjL._AC_SL1500_.jpg",
+    "affiliateLink": "https://amzn.to/4c95SD1",
+    "category": "everyday"
+  },
+  {
+    "id": 5,
+    "title": "Little Green Mini Portable Carpet and Upholstery Deep Cleaner",
+    "description": "This portable carpet and upholstery cleaner packs a powerful punch, easily tackling deep-down dirt, spills, and stains while being compact enough to store in any small space.",
+    "image": "https://m.media-amazon.com/images/I/71dRwF+K39L._AC_SL1500_.jpg",
+    "affiliateLink": "https://amzn.to/4rK6KCr",
+    "category": "home"
+  }
+]
