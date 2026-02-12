@@ -361,7 +361,7 @@ const ModernFindsGuide = () => {
 // Wrapper component with Router
 const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/modern-finds-guide">
       <Routes>
         <Route path="/" element={<ModernFindsGuide />} />
         <Route path="/category/:category" element={<ModernFindsGuide />} />
@@ -369,5 +369,4 @@ const App = () => {
     </BrowserRouter>
   );
 };
-
 export default App;
