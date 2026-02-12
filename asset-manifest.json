@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/modern-finds-guide/static/js/main.512f1753.js",
+    "main.js": "/modern-finds-guide/static/js/main.2f59b288.js",
     "index.html": "/modern-finds-guide/index.html",
-    "main.512f1753.js.map": "/modern-finds-guide/static/js/main.512f1753.js.map"
+    "main.2f59b288.js.map": "/modern-finds-guide/static/js/main.2f59b288.js.map"
   },
   "entrypoints": [
-    "static/js/main.512f1753.js"
+    "static/js/main.2f59b288.js"
   ]
 }
