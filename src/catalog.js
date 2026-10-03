@@ -33,7 +33,7 @@ export function safeUrl(value, amazon = false) {
     return (
       u.protocol === "https:" &&
       (!amazon ||
-        /^(amzn\.to|([a-z0-9-]+\.)?amazon\.(com|ca|co\.uk|de|fr|it|es|co\.jp|com\.au|in))$/i.test(
+        /^(amzn\.to|link\.amazon|([a-z0-9-]+\.)?amazon\.(com|ca|co\.uk|de|fr|it|es|co\.jp|com\.au|in))$/i.test(
           u.hostname,
         ))
     );
@@ -68,7 +68,7 @@ export function validateProduct(p) {
     return "Use lowercase letters, numbers, and hyphens for the slug.";
   if (!categories.includes(p.category)) return "Choose a category.";
   if (!safeUrl(p.affiliate_url, true))
-    return "Use a valid HTTPS Amazon or amzn.to link.";
+    return "Use an HTTPS Amazon, amzn.to, or link.amazon URL.";
   if (p.image_url && !safeUrl(p.image_url)) return "Use an HTTPS image URL.";
   if (!Number.isInteger(Number(p.sort_order)))
     return "Sort order must be a whole number.";
