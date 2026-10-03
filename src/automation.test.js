@@ -1,5 +1,10 @@
 import { it, expect } from "vitest";
-import { identity, contentPack, creativeSVG } from "./contentEngine";
+import {
+  identity,
+  contentPack,
+  creativeSVG,
+  manualCandidate,
+} from "./contentEngine";
 it("deduplicates full Amazon URLs independent of affiliate tracking", () => {
   expect(identity("https://www.amazon.com/dp/B012345678?tag=first")).toBe(
     identity("https://amazon.com/gp/product/B012345678?tag=second"),
@@ -30,4 +35,17 @@ it("uses verified facts, site destinations and exact creative dimensions", () =>
   expect(creativeSVG(pack.posts[0], [p], "List pin")).not.toContain(
     "Useful <find>",
   );
+});
+
+it("imports link.amazon short links without changing tracking or casing", () => {
+  const url = "https://link.amazon/B0hfb3Azq";
+  const p = manualCandidate({
+    title: "Tissue box cover",
+    description: "Square tissue box cover.",
+    category: "Home",
+    affiliate_url: url,
+  });
+  expect(p.affiliate_url).toBe(url);
+  expect(p.source_key).toBe("link.amazon/B0hfb3Azq");
+  expect(p.published).toBe(false);
 });

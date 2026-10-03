@@ -125,7 +125,9 @@ test("owner login, draft create, edit, publish, feature, order and confirmed del
   await page
     .getByLabel("Short description")
     .fill("A useful draft for testing product management.");
-  await page.getByLabel("Amazon affiliate URL").fill("https://amzn.to/test");
+  await page
+    .getByLabel("Amazon affiliate URL")
+    .fill("https://link.amazon/B0hfb3Azq");
   // Supabase emits SIGNED_IN again when the browser tab regains focus.
   await page.evaluate(async () => {
     const { backend } = await import("/modern-finds-guide/src/backend.js");
@@ -153,7 +155,7 @@ test("owner login, draft create, edit, publish, feature, order and confirmed del
     "Useful test find",
   );
   await expect(page.getByLabel("Amazon affiliate URL")).toHaveValue(
-    "https://amzn.to/test",
+    "https://link.amazon/B0hfb3Azq",
   );
 
   await page.getByRole("button", { name: "Save find →" }).click();

@@ -39,6 +39,15 @@ beforeAll(async () => {
     ),
   );
   await db.exec(
+    readFileSync(
+      new URL(
+        "../supabase/migrations/20261003050400_amazon_deep_links.sql",
+        import.meta.url,
+      ),
+      "utf8",
+    ),
+  );
+  await db.exec(
     `insert into public.admin_users values ('${owner}');${product("published", true)};${product("draft", false)};`,
   );
 }, 30000);
@@ -232,6 +241,25 @@ describe("PostgreSQL access policies", () => {
         )
       ).rows[0],
     ).toEqual({ status: "Draft", scheduled_at: null });
+  });
+  it("owner can save link.amazon links but lookalikes remain rejected", async () => {
+    await as(
+      "authenticated",
+      owner,
+      "insert into public.products(slug,title,category,description,affiliate_url) values ('deep-link','Tissue box cover','Home','Verified description','https://link.amazon/B0hfb3Azq')",
+    );
+    await expect(
+      as(
+        "authenticated",
+        owner,
+        "update public.products set affiliate_url='https://link.amazon.evil.test/test' where slug='deep-link'",
+      ),
+    ).rejects.toThrow();
+    await as(
+      "authenticated",
+      owner,
+      "delete from public.products where slug='deep-link'",
+    );
   });
   it("revoking owner membership immediately prevents mutation", async () => {
     await db.exec(`delete from public.admin_users where user_id='${owner}'`);

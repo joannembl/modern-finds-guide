@@ -32,9 +32,13 @@ describe("catalog behavior", () => {
       "https://evilamazon.com/item",
       "http://amzn.to/a",
       "https://amzn.to@evil.test/a",
+      "https://link.amazon.evil.test/a",
+      "https://evil-link.amazon/a",
+      "http://link.amazon/a",
     ].forEach((url) => expect(safeUrl(url, true)).toBe(false));
     expect(safeUrl("https://www.amazon.com/dp/ABC?tag=owner", true)).toBe(true);
     expect(safeUrl("https://amzn.to/abc", true)).toBe(true);
+    expect(safeUrl("https://link.amazon/B0hfb3Azq", true)).toBe(true);
   });
   it("validates editable product fields", () => {
     expect(validateProduct(seedProducts[0])).toBe("");
