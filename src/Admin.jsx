@@ -39,6 +39,7 @@ export default function Admin() {
   const [studio, setStudio] = useState(false);
   const [requested, setRequested] = useState(null);
   const [user, setUser] = useState(null);
+  const accountId = useRef(null);
   const [authLoading, setAuthLoading] = useState(!!backend);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -55,11 +56,30 @@ export default function Admin() {
   useEffect(() => {
     if (!backend) return;
     let live = true;
+    const applyUser = (nextUser) => {
+      if (!live) return;
+      const nextId = nextUser?.id || null;
+      // Session recovery and token refresh can repeat for the same account.
+      // Only an account change should discard private editor state.
+      if (accountId.current !== nextId) {
+        accountId.current = nextId;
+        setAdmin(false);
+        setProducts([]);
+        setEditor(null);
+        setDirty(false);
+        setDeleting(null);
+        setStudio(false);
+        setRequested(null);
+      }
+      setUser((previous) =>
+        previous?.id === nextUser?.id ? previous : nextUser,
+      );
+    };
     backend.auth
       .getUser()
       .then(({ data }) => {
         if (live) {
-          setUser(data.user);
+          applyUser(data.user);
           setAuthLoading(false);
         }
       })
@@ -70,11 +90,7 @@ export default function Admin() {
         }
       });
     const { data } = backend.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null);
-      setAdmin(false);
-      setProducts([]);
-      setEditor(null);
-      setDirty(false);
+      applyUser(session?.user || null);
     });
     return () => {
       live = false;
@@ -121,7 +137,7 @@ export default function Admin() {
     return () => {
       live = false;
     };
-  }, [user]);
+  }, [user?.id]);
   const openEditor = (p) => {
     if (dirty && !window.confirm("Discard your unsaved changes?")) return;
     setEditor(p);

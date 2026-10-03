@@ -126,6 +126,36 @@ test("owner login, draft create, edit, publish, feature, order and confirmed del
     .getByLabel("Short description")
     .fill("A useful draft for testing product management.");
   await page.getByLabel("Amazon affiliate URL").fill("https://amzn.to/test");
+  // Supabase emits SIGNED_IN again when the browser tab regains focus.
+  await page.evaluate(async () => {
+    const { backend } = await import("/modern-finds-guide/src/backend.js");
+    let subscription;
+    await new Promise((resolve) => {
+      const { data } = backend.auth.onAuthStateChange((event) => {
+        if (event === "SIGNED_IN") resolve();
+      });
+      Object.defineProperty(document, "visibilityState", {
+        configurable: true,
+        value: "hidden",
+      });
+      window.dispatchEvent(new Event("visibilitychange"));
+      Object.defineProperty(document, "visibilityState", {
+        configurable: true,
+        value: "visible",
+      });
+      window.dispatchEvent(new Event("visibilitychange"));
+      subscription = data.subscription;
+    });
+    subscription.unsubscribe();
+    delete document.visibilityState;
+  });
+  await expect(page.getByLabel("Product title")).toHaveValue(
+    "Useful test find",
+  );
+  await expect(page.getByLabel("Amazon affiliate URL")).toHaveValue(
+    "https://amzn.to/test",
+  );
+
   await page.getByRole("button", { name: "Save find →" }).click();
   await expect(page.locator(".admin-list")).toContainText("Draft");
   expect(rows[0].published).toBe(false);
