@@ -1,5 +1,11 @@
 # Setup and deployment
 
+## Current connection status
+
+The dedicated **Modern Finds Guide** project (`etytugdibeqqykxejhsm`) is connected. The product migration and five-product seed are applied. GitHub Actions variables are configured, and local configuration is saved in ignored `.env.local`. Live API checks confirm public reads and rejected anonymous updates; Supabase Security Advisors report no warnings.
+
+**Still needed:** create the owner account and authorize its UUID, disable public signups/anonymous sign-ins in Authentication settings, then merge the redesign and enable GitHub Actions Pages deployment. No owner accounts existed at the connection check.
+
 ## 1. Connect a dedicated Supabase project
 
 The connected projects at implementation time belonged to other apps; neither was modified.
