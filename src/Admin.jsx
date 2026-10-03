@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { backend, listProducts, saveProduct, removeProduct } from "./backend";
 import { categories, slugify, validateProduct } from "./catalog";
+import Automation from "./Automation";
 const blank = () => ({
   title: "",
   slug: "",
@@ -35,6 +36,8 @@ function DeleteDialog({ children, busy, onCancel }) {
   );
 }
 export default function Admin() {
+  const [studio, setStudio] = useState(false);
+  const [requested, setRequested] = useState(null);
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(!!backend);
   const [email, setEmail] = useState("");
@@ -300,7 +303,40 @@ export default function Admin() {
         </div>
       ) : admin ? (
         <>
-          {editor ? (
+          <div className="studio-nav">
+            <button
+              aria-pressed={!studio}
+              onClick={() => {
+                if (!dirty || window.confirm("Discard unsaved changes?")) {
+                  setStudio(false);
+                  setEditor(null);
+                  setDirty(false);
+                }
+              }}
+            >
+              Products
+            </button>
+            <button
+              aria-pressed={studio}
+              onClick={() => {
+                if (!dirty || window.confirm("Discard unsaved changes?")) {
+                  setStudio(true);
+                  setEditor(null);
+                  setDirty(false);
+                }
+              }}
+            >
+              Automation / Content Queue
+            </button>
+          </div>
+          {studio ? (
+            <Automation
+              products={products}
+              onProducts={setProducts}
+              requested={requested}
+              onConsumed={() => setRequested(null)}
+            />
+          ) : editor ? (
             <form onSubmit={save} className="editor">
               <div className="section-heading">
                 <h2>{editor.id ? "Edit find" : "Add a new find"}</h2>
@@ -476,6 +512,14 @@ export default function Admin() {
                         {p.featured && <span className="status">Featured</span>}
                       </div>
                       <div className="row-actions">
+                        <button
+                          onClick={() => {
+                            setRequested(p.id);
+                            setStudio(true);
+                          }}
+                        >
+                          Generate Content Pack
+                        </button>
                         <button onClick={() => openEditor({ ...p })}>
                           Edit
                         </button>

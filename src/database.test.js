@@ -30,6 +30,15 @@ beforeAll(async () => {
     ),
   );
   await db.exec(
+    readFileSync(
+      new URL(
+        "../supabase/migrations/20261003042236_content_automation.sql",
+        import.meta.url,
+      ),
+      "utf8",
+    ),
+  );
+  await db.exec(
     `insert into public.admin_users values ('${owner}');${product("published", true)};${product("draft", false)};`,
   );
 }, 30000);
@@ -133,6 +142,96 @@ describe("PostgreSQL access policies", () => {
         )
       ).rows,
     ).toEqual([{ slug: "owner-new" }]);
+  });
+  it("automation stays owner-only, packs are atomic, and approval is required", async () => {
+    await expect(
+      as("anon", null, "select * from public.content_queue"),
+    ).rejects.toThrow();
+    expect(
+      (await as("authenticated", visitor, "select * from public.content_queue"))
+        .rows,
+    ).toEqual([]);
+    const id = (
+      await db.query("select id from public.products where slug='draft'")
+    ).rows[0].id;
+    const pack = JSON.stringify({
+      website: {
+        title: "Test",
+        description: "Verified",
+        notes: "Notes",
+        category: "Home",
+        tags: [],
+        key_features: [],
+        placements: [],
+        seo_title: "Test",
+        seo_description: "Verified",
+        display_text: "Check price on Amazon",
+      },
+      posts: [
+        {
+          platform: "Pinterest",
+          title: "Test",
+          description: "Verified",
+          destination_url: "https://example.com/find/draft",
+          board: "Home",
+          alt_text: "Typography",
+          hashtags: "",
+          cta: "",
+        },
+      ],
+    }).replaceAll("'", "''");
+    const call = `select public.create_content_pack(array['${id}'::uuid],'${pack}'::jsonb,'[]'::jsonb) as id`;
+    const q = (await as("authenticated", owner, call)).rows[0].id;
+    await expect(as("authenticated", owner, call)).rejects.toThrow();
+    await expect(
+      as("authenticated", owner, `select public.approve_site_content('${q}')`),
+    ).rejects.toThrow();
+    await expect(
+      as(
+        "authenticated",
+        owner,
+        `update public.social_posts set status='Scheduled',scheduled_at=now() where queue_id='${q}'`,
+      ),
+    ).rejects.toThrow();
+    await as(
+      "authenticated",
+      owner,
+      `update public.content_queue set status='Approved' where id='${q}';`,
+    );
+    await as(
+      "authenticated",
+      owner,
+      `select public.approve_site_content('${q}')`,
+    );
+    await as(
+      "authenticated",
+      owner,
+      `insert into public.media_assets(queue_id,platform,format,template,svg,status) values('${q}','Pinterest','Pinterest','hero','<svg/>','Approved')`,
+    );
+    await as(
+      "authenticated",
+      owner,
+      `update public.social_posts set status='Approved' where queue_id='${q}'`,
+    );
+    await as(
+      "authenticated",
+      owner,
+      `update public.social_posts set status='Scheduled',scheduled_at=now() where queue_id='${q}'`,
+    );
+    await as(
+      "authenticated",
+      owner,
+      `update public.social_posts set description='Edited' where queue_id='${q}'`,
+    );
+    expect(
+      (
+        await as(
+          "authenticated",
+          owner,
+          `select status,scheduled_at from public.social_posts where queue_id='${q}'`,
+        )
+      ).rows[0],
+    ).toEqual({ status: "Draft", scheduled_at: null });
   });
   it("revoking owner membership immediately prevents mutation", async () => {
     await db.exec(`delete from public.admin_users where user_id='${owner}'`);

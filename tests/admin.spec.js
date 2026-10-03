@@ -3,6 +3,9 @@ test("owner login, draft create, edit, publish, feature, order and confirmed del
   page,
 }) => {
   let rows = [];
+  let queue = [],
+    posts = [],
+    media = [];
   let failSave = false;
   const id = "11111111-1111-4111-8111-111111111111";
   const user = {
@@ -41,7 +44,46 @@ test("owner login, draft create, edit, publish, feature, order and confirmed del
     else if (url.pathname.endsWith("/user")) body = user;
     else if (url.pathname.endsWith("/logout")) body = {};
     else if (url.pathname.includes("/admin_users")) body = { user_id: id };
-    else if (url.pathname.includes("/products")) {
+    else if (url.pathname.includes("/rpc/create_content_pack")) {
+      const values = req.postDataJSON();
+      queue = [
+        {
+          id: "queue-id",
+          product_id: id,
+          product_ids: [id],
+          status: "Draft",
+          website: values.pack.website,
+        },
+      ];
+      posts = values.pack.posts.map((p, i) => ({
+        ...p,
+        id: `post-${i}`,
+        queue_id: "queue-id",
+      }));
+      media = values.assets.map((m, i) => ({
+        ...m,
+        id: `media-${i}`,
+        queue_id: "queue-id",
+        status: "Draft",
+      }));
+      body = "queue-id";
+    } else if (
+      url.pathname.includes("/content_queue") ||
+      url.pathname.includes("/social_posts") ||
+      url.pathname.includes("/media_assets")
+    ) {
+      const collection = url.pathname.includes("/content_queue")
+        ? queue
+        : url.pathname.includes("/social_posts")
+          ? posts
+          : media;
+      if (method === "POST") {
+        const value = req.postDataJSON();
+        const index = collection.findIndex((x) => x.id === value.id);
+        collection[index] = value;
+        body = value;
+      } else body = collection;
+    } else if (url.pathname.includes("/products")) {
       if (method === "POST" || method === "PATCH") {
         if (failSave) {
           status = 409;
@@ -71,7 +113,7 @@ test("owner login, draft create, edit, publish, feature, order and confirmed del
   });
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
-  await page.goto("http://127.0.0.1:5174/modern-finds-guide/admin");
+  await page.goto("http://127.0.0.1:5274/modern-finds-guide/admin");
   await page.getByLabel("Email", { exact: true }).fill("owner@example.com");
   await page.getByLabel("Password", { exact: true }).fill("test-only-password");
   await page.getByRole("button", { name: /Sign in to owner/ }).click();
@@ -113,6 +155,37 @@ test("owner login, draft create, edit, publish, feature, order and confirmed del
     published: true,
     featured: true,
   });
+  await page
+    .getByRole("button", { name: "Generate Content Pack", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "Generate Content Pack", exact: true })
+    .click();
+  await expect(
+    page.getByText("1 content packs created.", { exact: false }),
+  ).toBeVisible();
+  expect(queue).toHaveLength(1);
+  expect(posts).toHaveLength(2);
+  expect(media).toHaveLength(3);
+  await page.getByRole("button", { name: "Review pack" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Website copy · Draft" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Approve website copy" }).click();
+  await expect(
+    page.getByRole("button", { name: "Publish approved product to site" }),
+  ).toBeEnabled();
+  await page
+    .getByRole("button", { name: "Media Library", exact: true })
+    .click();
+  await expect(page.locator(".media-grid img")).toHaveCount(3);
+  await page.getByRole("button", { name: "Approve asset" }).first().click();
+  expect(media[0].status).toBe("Approved");
+  await page.screenshot({
+    path: "test-results/automation-media.png",
+    fullPage: true,
+  });
+  await page.getByRole("button", { name: "Products", exact: true }).click();
   await page.getByRole("button", { name: "Delete", exact: true }).click();
   await page.getByRole("button", { name: "Keep product" }).click();
   expect(rows).toHaveLength(1);
