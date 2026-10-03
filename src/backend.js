@@ -30,3 +30,34 @@ export async function removeProduct(id) {
   if (error) throw error;
   return data;
 }
+export async function studioRows(table) {
+  const { data, error } = await backend
+    .from(table)
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return data;
+}
+export async function studioSave(table, row) {
+  const { created_at, updated_at, ...fields } = row;
+  const { data, error } = await backend
+    .from(table)
+    .upsert(fields)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+}
+export async function createPack(productIds, pack, assets) {
+  const { data, error } = await backend.rpc("create_content_pack", {
+    product_ids: productIds,
+    pack,
+    assets,
+  });
+  if (error) throw error;
+  return data;
+}
+export async function publishQueue(id) {
+  const { error } = await backend.rpc("approve_site_content", { queue_id: id });
+  if (error) throw error;
+}

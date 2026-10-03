@@ -351,6 +351,19 @@ function Detail() {
   const { slug } = useParams();
   const { products, loading, error, retry } = useCatalog();
   const p = products.find((p) => p.published && p.slug === slug);
+  useEffect(() => {
+    if (!p) return;
+    const previous = document.title;
+    const meta = document.querySelector('meta[name="description"]');
+    const previousDescription = meta?.content;
+    document.title = p.seo_title || `${p.title} | Modern Finds Guide`;
+    if (meta) meta.content = p.seo_description || p.description;
+    return () => {
+      document.title = previous;
+      if (meta) meta.content = previousDescription;
+    };
+  }, [p]);
+
   return (
     <main id="main" className="section detail">
       {loading ? (
@@ -382,6 +395,16 @@ function Detail() {
                 <div className="recommendation">
                   <h2>A closer look</h2>
                   <p>{p.notes}</p>
+                </div>
+              )}
+              {!!p.key_features?.length && (
+                <div className="recommendation">
+                  <h2>Key features</h2>
+                  <ul>
+                    {p.key_features.map((feature, i) => (
+                      <li key={i}>{feature}</li>
+                    ))}
+                  </ul>
                 </div>
               )}
               <div className="tags">

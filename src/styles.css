@@ -1080,3 +1080,6 @@ footer > div:nth-child(2) {
     scroll-behavior: auto;
   }
 }
+.studio-nav {display:flex;gap:12px;margin:20px 0 32px;border-bottom:1px solid var(--line);padding-bottom:20px}
+button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.automation .row-actions{flex-wrap:wrap;margin:16px 0;gap:8px}.automation label{display:flex;flex-direction:column;gap:6px;margin:12px 0}.automation textarea,.automation select,.automation input{padding:10px;border:1px solid var(--line);background:white;color:var(--ink);border-radius:4px;width:100%}.automation .checkbox{flex-direction:row;align-items:center}.automation .checkbox input{width:auto}.product-picks{max-height:260px;overflow:auto;margin:16px 0}.media-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.media-grid img{width:100%;max-height:420px;object-fit:contain}.social-editor{border-top:1px solid var(--line);margin-top:28px;padding-top:24px}.calendar-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:20px 0}.calendar-grid article{padding:20px;background:var(--sage);border-radius:8px}.automation .editor{margin:24px 0}@media(max-width:800px){.media-grid,.calendar-grid{grid-template-columns:1fr}.studio-nav{flex-wrap:wrap}}
