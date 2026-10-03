@@ -1,187 +1,35 @@
-# Modern Finds Guide - React + Bootstrap
+# Modern Finds Guide
 
-A beautiful Pinterest-to-Amazon affiliate landing page built with React and Bootstrap.
+A React product-discovery guide with an editorial design and a Supabase owner studio. The existing five product descriptions, image URLs, affiliate links, Pinterest domain verification, and legacy category URLs are retained. No prices or invented reviews are displayed.
 
-## Features
+## Run locally
 
-- ✨ Dynamic category filtering
-- 📦 Add/delete products on the fly
-- 🏷️ Custom category creation
-- 🗑️ Delete categories (protected defaults)
-- 📱 Fully responsive design
-- 🎨 Beautiful, modern aesthetics
+Node 22.12+ is required.
 
-## Setup Instructions
-
-### Prerequisites
-- Node.js (v14 or higher)
-- npm or yarn
-
-### Installation
-
-1. Navigate to the project directory:
-```bash
-cd modern-finds-guide
-```
-
-2. **IMPORTANT: Set up your admin password**
-```bash
-# Copy the example environment file
-cp .env.example .env
-
-# Edit .env and change the password
-# REACT_APP_ADMIN_PASSWORD=your_secure_password_here
-```
-
-**Security Note:** The `.env` file is already in `.gitignore` so your password won't be committed to GitHub.
-
-3. Install dependencies:
-```bash
-npm install
-```
-
-4. Start the development server:
-```bash
+```sh
+npm ci
 npm start
 ```
 
-The app will open at `http://localhost:3000`
+Open http://127.0.0.1:5173/modern-finds-guide/. Without backend configuration the public site uses the existing five recommendations; owner management explains the setup steps. With configuration, Supabase is the source of truth, including empty collections and drafts. Failed backend requests do not fall back to stale products.
 
-## Build for Production
-
-To create a production build:
-
-```bash
+```sh
+npm test
 npm run build
+npm run preview
 ```
 
-This creates an optimized build in the `build` folder.
+For browser checks run `npx playwright install chromium`, then `npm run test:browser`. The tests start isolated public and mock-backend previews. Database policy tests execute the real migration in an embedded PostgreSQL instance.
 
-## Deployment Options
+See [SETUP.md](SETUP.md) for backend setup and deployment. Admin: `/modern-finds-guide/admin` on GitHub Pages, or `/admin` on root hosting. Product edits are stored in the database and require no source edits or redeployments.
 
-**IMPORTANT:** For all deployment options, you must set the environment variable `REACT_APP_ADMIN_PASSWORD` in your hosting platform's settings.
+## Implementation
 
-### Option 1: Netlify (Recommended - Easiest)
+- React 18, React Router, Vite, pinned Supabase JS client.
+- Public search, category filters, sorting, product details, featured products, affiliate disclosure.
+- Email/password owner authentication; allowlisted user IDs enforced by database row policies. No frontend passwords or privileged keys.
+- Add/edit/delete, tags, image URLs, notes, publish/draft, featured and numeric sort order. Lower order values appear first; ties sort alphabetically.
+- All fields are rendered as plain text. HTTPS URL checks, affiliate link attributes, failure states, deletion confirmation, and unsaved-edit guards.
+- Image upload is intentionally not required: owner supplies an authorized HTTPS image URL.
 
-1. Sign up at https://netlify.com
-2. Drag and drop the `build` folder to Netlify
-3. **Set environment variable:**
-   - Go to Site Settings → Environment Variables
-   - Add: `REACT_APP_ADMIN_PASSWORD` = `your_secure_password`
-4. Redeploy the site
-
-**Using Netlify CLI:**
-```bash
-npm install -g netlify-cli
-npm run build
-netlify deploy --prod
-
-# Then in Netlify dashboard, set the environment variable
-```
-
-### Option 2: Vercel
-
-1. Sign up at https://vercel.com
-2. Install Vercel CLI:
-```bash
-npm install -g vercel
-```
-3. Deploy:
-```bash
-npm run build
-vercel --prod
-```
-4. **Set environment variable:**
-   - Go to Project Settings → Environment Variables
-   - Add: `REACT_APP_ADMIN_PASSWORD` = `your_secure_password`
-   - Redeploy
-
-### Option 3: GitHub Pages
-
-**Note:** GitHub Pages doesn't support environment variables for React apps. For GitHub Pages, you'll need to use a different approach (like a backend API for authentication). We recommend using Netlify or Vercel instead.
-
-### Option 4: AWS Amplify
-
-1. Install Amplify CLI:
-```bash
-npm install -g @aws-amplify/cli
-```
-
-2. Initialize and deploy:
-```bash
-amplify init
-amplify add hosting
-```
-
-3. **Set environment variable:**
-   - In AWS Amplify Console → Environment Variables
-   - Add: `REACT_APP_ADMIN_PASSWORD` = `your_secure_password`
-
-4. Deploy:
-```bash
-amplify publish
-```
-
-## Customization
-
-### Security: Change Admin Password
-
-**Local Development:**
-Edit the `.env` file:
-```
-REACT_APP_ADMIN_PASSWORD=your_new_secure_password
-```
-
-**Production Deployment:**
-Set the environment variable in your hosting platform's dashboard (see Deployment Options above).
-
-**Important Security Notes:**
-- Never commit your `.env` file to GitHub (it's already in `.gitignore`)
-- Use a strong, unique password
-- The `.env.example` file is safe to commit - it's just a template
-- When others clone your repo, they need to create their own `.env` file
-
-### Update Products
-- Use the "Add New Product" form in the app
-- Or edit the initial products in `src/App.js`
-
-### Change Colors
-Modify the color variables at the top of the component:
-- `#FFF8F0` - Background cream
-- `#8B9A7E` - Sage green
-- `#D87750` - Terracotta
-- `#2C2C2C` - Charcoal
-
-### Add Your Affiliate Links
-Replace `https://amazon.com/your-affiliate-link` with your actual Amazon Associate URLs.
-
-## File Structure
-
-```
-react-app/
-├── public/
-│   └── index.html
-├── src/
-│   ├── App.js          (Main component)
-│   └── index.js        (Entry point)
-├── package.json
-└── README.md
-```
-
-## Technologies Used
-
-- React 18
-- Bootstrap 5
-- Google Fonts (Playfair Display, DM Sans)
-- CSS3 Animations
-
-## Browser Support
-
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-
-## License
-
-This project is open source and available for personal and commercial use.
+The old Pinterest tracking snippet was removed because it contained placeholder email data and reported outbound clicks as purchases. Domain verification remains.
